@@ -44,6 +44,86 @@ export const h2           = (t) => `## ${t}`;
 /** ### Heading 3  (small) */
 export const h3           = (t) => `### ${t}`;
 
+// ── Progress Bars ─────────────────────────────────────────────────────────────
+
+const BAR_STYLES = {
+  //  filled char,  empty char,   left cap,  right cap
+  block:   { f: '█',  e: '░',  l: '[',  r: ']'  },
+  fancy:   { f: '▰',  e: '▱',  l: '⟦',  r: '⟧'  },
+  slim:    { f: '━',  e: '─',  l: '╟',  r: '╢'  },
+  dots:    { f: '●',  e: '○',  l: '⦗',  r: '⦘'  },
+  arrow:   { f: '▶',  e: '▷',  l: '【', r: '】' },
+  square:  { f: '■',  e: '□',  l: '⌈',  r: '⌉'  },
+  diamond: { f: '◆',  e: '◇',  l: '《', r: '》' },
+  star:    { f: '★',  e: '☆',  l: '❪',  r: '❫'  },
+  pulse:   { f: '▮',  e: '▯',  l: '❰',  r: '❱'  },
+  fire:    { f: '🟥', e: '⬛', l: '',   r: ''   },
+  purple:  { f: '🟪', e: '⬛', l: '',   r: ''   },
+  blue:    { f: '🟦', e: '⬛', l: '',   r: ''   },
+  green:   { f: '🟩', e: '⬛', l: '',   r: ''   },
+};
+
+/**
+ * Render a progress bar.
+ * @param {number} current   – current value
+ * @param {number} total     – max value
+ * @param {object} opts
+ *   style  – key from BAR_STYLES  (default 'block')
+ *   size   – bar width in chars   (default 20)
+ *   label  – optional suffix text
+ */
+export function progressBar(current, total, { style = 'block', size = 20, label = '' } = {}) {
+  const pct     = Math.min(Math.max(current / total, 0), 1);
+  const filled  = Math.round(pct * size);
+  const empty   = size - filled;
+  const s       = BAR_STYLES[style] ?? BAR_STYLES.block;
+  const bar     = s.f.repeat(filled) + s.e.repeat(empty);
+  const percent = Math.round(pct * 100);
+  const suffix  = label ? `  ${label}` : '';
+  return `${s.l}${bar}${s.r}  **${percent}%**${suffix}`;
+}
+
+/**
+ * Indeterminate (bouncing) bar — looks like an animation at different offsets.
+ * Pass offset 0–(size-1) cycling over time for a "moving" effect.
+ */
+export function indeterminateBar(offset = 0, { style = 'block', size = 20 } = {}) {
+  const s       = BAR_STYLES[style] ?? BAR_STYLES.block;
+  const GLOW    = 6; // spotlight width
+  const bar     = Array.from({ length: size }, (_, i) => {
+    const dist = Math.abs(i - (offset % size));
+    if (dist === 0) return '█';
+    if (dist === 1) return '▓';
+    if (dist === 2) return '▒';
+    if (dist <= GLOW / 2) return '░';
+    return s.e;
+  }).join('');
+  return `${s.l}${bar}${s.r}`;
+}
+
+// ── Spinner Frames ────────────────────────────────────────────────────────────
+
+export const SPINNERS = {
+  braille:  ['⠋','⠙','⠹','⠸','⠼','⠴','⠦','⠧','⠇','⠏'],
+  moon:     ['🌑','🌒','🌓','🌔','🌕','🌖','🌗','🌘'],
+  circle:   ['◐','◓','◑','◒'],
+  arrows:   ['←','↖','↑','↗','→','↘','↓','↙'],
+  clock:    ['🕐','🕑','🕒','🕓','🕔','🕕','🕖','🕗','🕘','🕙','🕚','🕛'],
+  fire:     ['🔥','💥','✨','⚡','🔥'],
+  pulse:    ['▪️','▫️','▪️','▫️'],
+  hearts:   ['🖤','🤍','💜','🖤'],
+  stars:    ['✦','✧','✦','✧'],
+  loading:  ['⏳','⌛','⏳','⌛'],
+  sword:    ['⚔️','🗡️','⚔️','🗡️'],
+  magic:    ['🔮','✨','💫','🌟','✨'],
+};
+
+/** Get one spinner frame (auto-wraps). */
+export function spinnerFrame(style = 'braille', frame = 0) {
+  const frames = SPINNERS[style] ?? SPINNERS.braille;
+  return frames[Math.abs(frame) % frames.length];
+}
+
 /** *italic* */
 export const italic       = (t) => `*${t}*`;
 /** **bold** */
@@ -370,14 +450,62 @@ export function infoEmbed(title, description, extra = {}) {
 }
 
 /**
- * ⏳ Loading embed
+ * ⏳ Loading embed — indeterminate, beautiful scanning bar.
+ * Pass `frame` (0-n, increments each call) to animate the spotlight.
  */
-export function loadingEmbed(title = 'Processing...') {
+export function loadingEmbed(title = 'Processing...', frame = 0) {
+  const spin  = spinnerFrame('magic', frame);
+  const bar   = indeterminateBar(frame * 2, { style: 'block', size: 22 });
+  const dots  = '.'.repeat((frame % 3) + 1).padEnd(3, ' ');
   return createEmbed({
-    color: THEME.dark,
-    title: `⏳  ${title}`,
-    description: `> *Please wait a moment...*`,
+    color: THEME.purple,
+    title: `${spin}  ${title}`,
+    description: [
+      `\`\`\``,
+      bar,
+      `\`\`\``,
+      `> ${italic(`Working${dots}`)}`,
+    ].join('\n'),
     timestamp: false,
+    footer: { text: 'Lilith Protector  •  Please wait' },
+  });
+}
+
+/**
+ * 📊 Live progress embed — use during long operations.
+ * Shows a beautiful progress bar + live stats.
+ *
+ * @param {object} opts
+ *   title      – embed title
+ *   label      – what's being processed (e.g. "emojis")
+ *   current    – items done
+ *   total      – total items
+ *   stats      – array of { label, value } rows
+ *   barStyle   – key from BAR_STYLES (default 'fancy')
+ *   color      – embed color
+ *   frame      – spinner frame index
+ */
+export function progressEmbed({ title, label = 'items', current, total, stats = [], barStyle = 'fancy', color = THEME.purple, frame = 0 } = {}) {
+  const spin   = spinnerFrame('magic', frame);
+  const bar    = progressBar(current, total, { style: barStyle, size: 18, label: `${current}/${total} ${label}` });
+  const pct    = Math.round(Math.min(current / total, 1) * 100);
+  const isDone = current >= total;
+
+  const statLines = stats.map(s => row(s.label, String(s.value)));
+
+  return createEmbed({
+    color: isDone ? THEME.success : color,
+    title: `${isDone ? '✅' : spin}  ${title}`,
+    description: [
+      `\`\`\``,
+      progressBar(current, total, { style: 'block', size: 22 }),
+      `\`\`\``,
+      bar,
+      ``,
+      ...statLines,
+    ].filter(Boolean).join('\n'),
+    timestamp: false,
+    footer: { text: `Lilith Protector  •  ${pct}% complete` },
   });
 }
 

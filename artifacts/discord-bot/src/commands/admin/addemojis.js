@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, PermissionFlagsBits, AttachmentBuilder } from 'discord.js';
-import { createEmbed, successEmbed, errorEmbed, loadingEmbed, THEME, DIVIDER_STARS, h2, h3, bold, code, row, italic, EMOJI } from '../../utils/embedBuilder.js';
+import { createEmbed, successEmbed, errorEmbed, loadingEmbed, progressEmbed, progressBar, THEME, DIVIDER_STARS, h2, h3, bold, code, row, italic, EMOJI } from '../../utils/embedBuilder.js';
 
 export const data = new SlashCommandBuilder()
   .setName('addemojis')
@@ -352,19 +352,40 @@ export async function execute(interaction) {
     }
 
     await interaction.editReply({
-      embeds: [loadingEmbed(`Stealing ${found.length} emojis... this may take a moment`)],
+      embeds: [loadingEmbed(`Stealing ${found.length} emojis...`, 0)],
     });
 
-    let ok = 0, skipped = 0, failed = 0;
+    let ok = 0, skipped = 0, failed = 0, frame = 0;
     const errors = [];
 
-    for (const { name, id, animated } of found) {
+    for (let i = 0; i < found.length; i++) {
+      const { name, id, animated } = found[i];
       const ext = animated ? 'gif' : 'png';
       const url = `https://cdn.discordapp.com/emojis/${id}.${ext}?size=128`;
       const result = await uploadEmoji(guild, name, url);
       if (result.status === 'ok') ok++;
       else if (result.status === 'skipped') skipped++;
       else { failed++; errors.push(`\`${name}\`: ${result.reason}`); }
+
+      // Update progress bar every 3 emojis
+      if (i % 3 === 0) {
+        await interaction.editReply({
+          embeds: [progressEmbed({
+            title: 'Stealing Emojis...',
+            label: 'emojis',
+            current: i + 1,
+            total: found.length,
+            barStyle: 'fancy',
+            frame: frame++,
+            stats: [
+              { label: '✅ Added',   value: ok },
+              { label: '⏭️ Skipped', value: skipped },
+              { label: '❌ Failed',  value: failed },
+            ],
+          })],
+        }).catch(() => {});
+      }
+
       await sleep(800);
     }
 
@@ -373,6 +394,9 @@ export async function execute(interaction) {
         color: ok > 0 ? THEME.success : THEME.error,
         title: `${ok > 0 ? '✅' : '⚠️'}  Emoji Steal Complete`,
         description: [
+          `\`\`\``,
+          progressBar(ok + skipped, found.length, { style: 'block', size: 22 }),
+          `\`\`\``,
           h2('📊 Results'),
           row('Added', String(ok)),
           row('Skipped (already exists)', String(skipped)),
@@ -412,11 +436,13 @@ export async function execute(interaction) {
     const toUpload = pack.slice(0, slots);
     const skippedDueToSlots = pack.length - toUpload.length;
 
+    const packEmoji = { blob: '🔵', hype: '🔥', cats: '🐱', pepe: '😂' }[packName] ?? '📦';
+
     await interaction.reply({
-      embeds: [loadingEmbed(`Installing ${toUpload.length} emojis from the **${packName}** pack...`)],
+      embeds: [loadingEmbed(`${packEmoji} Installing ${packName} pack...`, 0)],
     });
 
-    let ok = 0, skipped = 0, failed = 0;
+    let ok = 0, skipped = 0, failed = 0, frame = 0;
     const errors = [];
 
     for (let i = 0; i < toUpload.length; i++) {
@@ -426,25 +452,38 @@ export async function execute(interaction) {
       else if (result.status === 'skipped') skipped++;
       else { failed++; errors.push(`\`${name}\`: ${result.reason}`); }
 
-      // Update progress every 10 emojis
-      if ((i + 1) % 10 === 0) {
+      // Update progress bar every 5 emojis
+      if (i % 5 === 0) {
         await interaction.editReply({
-          embeds: [loadingEmbed(`Installing emojis... **${i + 1}/${toUpload.length}** done`)],
+          embeds: [progressEmbed({
+            title: `${packEmoji} Installing ${packName} pack...`,
+            label: 'emojis',
+            current: i + 1,
+            total: toUpload.length,
+            barStyle: 'fancy',
+            frame: frame++,
+            stats: [
+              { label: '✅ Added',   value: ok },
+              { label: '⏭️ Skipped', value: skipped },
+              { label: '❌ Failed',  value: failed },
+            ],
+          })],
         }).catch(() => {});
       }
 
       await sleep(700);
     }
 
-    const packEmoji = { blob: '🔵', hype: '🔥', cats: '🐱', pepe: '😂' }[packName] ?? '📦';
-
     await interaction.editReply({
       embeds: [createEmbed({
         color: ok > 0 ? THEME.success : THEME.error,
-        title: `${ok > 0 ? '✅' : '⚠️'}  ${packEmoji} Pack Install Complete`,
+        title: `${ok > 0 ? '✅' : '⚠️'}  ${packEmoji} ${packName} Pack — Done!`,
         description: [
+          `\`\`\``,
+          progressBar(toUpload.length, toUpload.length, { style: 'block', size: 22 }),
+          `\`\`\``,
           h2(`${packEmoji} ${packName} Pack`),
-          `> ${italic(`${pack.length} emojis total`)}`,
+          `> ${italic(`${pack.length} emojis in this pack`)}`,
           ``,
           h3('📊 Results'),
           row('Added', String(ok)),
