@@ -6,11 +6,11 @@ import { fileURLToPath, pathToFileURL } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const token = process.env.DISCORD_TOKEN;
-const clientId = process.env.DISCORD_CLIENT_ID;
+const token = process.env.DISCORD_TOKEN || process.env.DISCORD_BOT_TOKEN;
+const clientId = process.env.DISCORD_CLIENT_ID || process.env.DISCORD_APPLICATION_ID;
 
 if (!token || !clientId) {
-  console.error('❌ DISCORD_TOKEN and DISCORD_CLIENT_ID must be set.');
+  console.error('❌ DISCORD_TOKEN (or DISCORD_BOT_TOKEN) and DISCORD_CLIENT_ID (or DISCORD_APPLICATION_ID) must be set.');
   process.exit(1);
 }
 

@@ -75,9 +75,9 @@ async function main() {
   console.log('\n📡 Loading events...');
   await loadEvents();
 
-  const token = process.env.DISCORD_TOKEN;
+  const token = process.env.DISCORD_TOKEN || process.env.DISCORD_BOT_TOKEN;
   if (!token) {
-    console.error('\n❌ DISCORD_TOKEN is not set! Add it to your environment secrets.\n');
+    console.error('\n❌ Neither DISCORD_TOKEN nor DISCORD_BOT_TOKEN is set! Add it to your environment variables.\n');
     process.exit(1);
   }
 
