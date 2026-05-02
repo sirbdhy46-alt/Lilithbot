@@ -2,13 +2,11 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-COPY artifacts/discord-bot/package.json artifacts/discord-bot/package-lock.json* ./
+COPY artifacts/discord-bot/package.json ./
 
-RUN npm install --omit=dev --prefer-offline
+RUN npm install --omit=dev
 
 COPY artifacts/discord-bot/src/ ./src/
 COPY artifacts/discord-bot/data/ ./data/
-
-RUN mkdir -p data
 
 CMD ["node", "src/index.js"]
