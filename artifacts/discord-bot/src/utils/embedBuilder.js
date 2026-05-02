@@ -6,31 +6,47 @@ import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // ── Load custom application emojis ──────────────────────────────────────────
-let C = {};  // C = custom emojis shorthand
+let C = {};
 const emojiPath = join(__dirname, '../../data/emojis.json');
 if (existsSync(emojiPath)) {
   try { C = JSON.parse(readFileSync(emojiPath, 'utf8')); } catch {}
 }
 
-// Helper: get custom emoji format or unicode fallback
+// Validate that a custom emoji format is usable (has <:name:snowflake> shape)
+const CUSTOM_EMOJI_RE = /^<a?:\w+:\d{17,20}>$/;
+function isValidCustomEmoji(format) {
+  return typeof format === 'string' && CUSTOM_EMOJI_RE.test(format);
+}
+
+// Helper: get custom emoji format if valid, else Unicode fallback
 function e(key, fallback = '') {
-  return C[`lp_${key}`]?.format ?? fallback;
+  const format = C[`lp_${key}`]?.format;
+  return isValidCustomEmoji(format) ? format : fallback;
+}
+
+// ── Strip custom emojis from footer/author text (Discord doesn't render them there)
+function sanitizeText(text = '') {
+  return text
+    .replace(/<a?:\w+:\d+>/g, '')   // remove <:name:id> and <a:name:id>
+    .replace(/:\w+:/g, '')           // remove :name: leftover
+    .replace(/\s{2,}/g, ' ')         // collapse double spaces
+    .trim();
 }
 
 // ── Theme colors ─────────────────────────────────────────────────────────────
 export const THEME = {
-  primary:  0xE53E3E,   // Red
-  success:  0x57F287,   // Discord green
-  error:    0xED4245,   // Discord red
-  warning:  0xFEE75C,   // Discord yellow
-  info:     0x5865F2,   // Discord blurple
-  dark:     0x2B2D31,   // Dark
+  primary:  0xE53E3E,
+  success:  0x57F287,
+  error:    0xED4245,
+  warning:  0xFEE75C,
+  info:     0x5865F2,
+  dark:     0x2B2D31,
   purple:   0x9B59B6,
   gold:     0xF1C40F,
   cyan:     0x00B0F4,
 };
 
-// ── Dividers (multiple styles) ────────────────────────────────────────────────
+// ── Dividers ──────────────────────────────────────────────────────────────────
 export const DIVIDER       = '╔══════════════════════════╗';
 export const DIVIDER_END   = '╚══════════════════════════╝';
 export const DIVIDER_MID   = '╠══════════════════════════╣';
@@ -39,16 +55,18 @@ export const DIVIDER_DOTS  = '· · · · · · · · · · · · · ·';
 export const DIVIDER_STARS = '✦ ─────────────────────── ✦';
 export const DIVIDER_CLEAN = '━━━━━━━━━━━━━━━━━━━━━━━━━━━';
 export const DIVIDER_FANCY = '◈━━━━━━━━━━━━━━━━━━━━━━━◈';
+export const DIVIDER_GLOW  = '⋆ ───────────────────── ⋆';
+export const DIVIDER_ROSE  = '❀ ─────────────────────── ❀';
 
-// ── EMOJI map — all using emoji.gg custom emojis ──────────────────────────────
+// ── EMOJI map — custom emoji with beautiful Unicode fallbacks ─────────────────
 export const EMOJI = {
-  // ── Security & Shields ─────────────────────────────────────────────────────
+  // ── Security & Shields ──────────────────────────────────────────────────────
   get shield()        { return e('shield',        '🛡️'); },
   get shield2()       { return e('shield2',       '🛡️'); },
   get dynoshield()    { return e('dynoshield',     '🛡️'); },
   get capshield()     { return e('capshield',      '🛡️'); },
 
-  // ── Ban & Punish ────────────────────────────────────────────────────────────
+  // ── Ban & Punish ─────────────────────────────────────────────────────────────
   get banhammer()     { return e('banhammer',     '🔨'); },
   get banhammer2()    { return e('banhammer2',    '🔨'); },
   get blobbanhammer() { return e('blobbanhammer', '🔨'); },
@@ -63,12 +81,12 @@ export const EMOJI = {
   get hitomiban()     { return e('hitomiban',      '🚫'); },
   get linkban()       { return e('linkban',        '🔗'); },
 
-  // ── Warnings & Alerts ───────────────────────────────────────────────────────
+  // ── Warnings & Alerts ────────────────────────────────────────────────────────
   get warning()       { return e('warning',       '⚠️'); },
   get warn()          { return e('warning',       '⚠️'); },
   get warningpc()     { return e('warningpc',     '⚠️'); },
 
-  // ── Police & Law ────────────────────────────────────────────────────────────
+  // ── Police & Law ─────────────────────────────────────────────────────────────
   get police()        { return e('police',        '👮'); },
   get police2()       { return e('police2',       '👮'); },
   get police3()       { return e('police3',       '👮'); },
@@ -76,32 +94,32 @@ export const EMOJI = {
   get hellopolice()   { return e('hellopolice',   '👮'); },
   get nekopolice()    { return e('nekopolice',    '👮'); },
 
-  // ── Weapons & Destruction ───────────────────────────────────────────────────
+  // ── Weapons & Destruction ────────────────────────────────────────────────────
   get nuke()          { return e('nuke',          '💣'); },
   get bomb()          { return e('bomb',          '💣'); },
   get sword()         { return e('sword',         '⚔️'); },
   get blade()         { return e('blade',         '⚔️'); },
   get redsaber()      { return e('redsaber',      '⚔️'); },
 
-  // ── Ninja & Action ──────────────────────────────────────────────────────────
+  // ── Ninja & Action ───────────────────────────────────────────────────────────
   get ninja()         { return e('ninja',         '🥷'); },
   get ninjamad()      { return e('ninjamad',      '🥷'); },
   get blobninja()     { return e('blobninja',     '🥷'); },
   get blobsaluteban() { return e('blobsaluteban', '🫡'); },
 
-  // ── Dark / Evil ─────────────────────────────────────────────────────────────
+  // ── Dark / Evil ──────────────────────────────────────────────────────────────
   get devil()         { return e('devil',         '😈'); },
   get devilparrot()   { return e('devilparrot',   '😈'); },
   get dark()          { return e('dark',          '🔥'); },
   get darkness()      { return e('darkness',      '🌑'); },
   get dragon()        { return e('dragon',        '🐉'); },
 
-  // ── Status: Success / Check ─────────────────────────────────────────────────
+  // ── Status: Success ──────────────────────────────────────────────────────────
   get check()         { return e('check',         '✅'); },
   get checkblob()     { return e('checkblob',     '✅'); },
   get dbcheck()       { return e('dbcheck',       '✅'); },
 
-  // ── Prestige & Rank ─────────────────────────────────────────────────────────
+  // ── Prestige & Rank ──────────────────────────────────────────────────────────
   get vip()           { return e('vip',           '💎'); },
   get badge()         { return e('badge',         '🏅'); },
   get frostellite()   { return e('frostellite',   '❄️'); },
@@ -114,34 +132,32 @@ export const EMOJI = {
   get gold()          { return e('gold',          '🥇'); },
   get diamond()       { return e('diamond',       '💎'); },
 
-  // ── Hype & Power ────────────────────────────────────────────────────────────
+  // ── Hype & Power ─────────────────────────────────────────────────────────────
   get fire()          { return e('fire',          '🔥'); },
   get zap()           { return e('zap',           '⚡'); },
   get boost()         { return e('boost',         '🚀'); },
   get boostArt()      { return e('boostArt',      '🚀'); },
   get pepepower()     { return e('pepepower',     '💪'); },
 
-  // ── Hearts & Love ───────────────────────────────────────────────────────────
+  // ── Hearts & Love ────────────────────────────────────────────────────────────
   get love()          { return e('love',          '❤️'); },
   get heart()         { return e('heart',         '💖'); },
   get heartbeat()     { return e('heartbeat',     '💗'); },
 
-  // ── Sparkles ────────────────────────────────────────────────────────────────
+  // ── Sparkles ─────────────────────────────────────────────────────────────────
   get sparkle()       { return e('sparkle',       '✨'); },
   get sparkle2()      { return e('sparkle2',      '✨'); },
   get sparkle3()      { return e('sparkle3',      '✨'); },
   get nekosparkle()   { return e('nekosparkle',   '✨'); },
   get sparklepeek()   { return e('sparklepeek',   '✨'); },
-
-  // Convenience aliases
   get sparkles()      { return e('sparkle',       '✨'); },
   get success()       { return e('sparkle',       '✨'); },
 
-  // ── Bot ─────────────────────────────────────────────────────────────────────
+  // ── Bot ──────────────────────────────────────────────────────────────────────
   get bot()           { return e('bot',           '🤖'); },
   get bottag()        { return e('bottag',        '🤖'); },
 
-  // ── Blob Emotions ───────────────────────────────────────────────────────────
+  // ── Blob Emotions ────────────────────────────────────────────────────────────
   get blobwave()      { return e('blobwave',      '👋'); },
   get blobjoining()   { return e('blobjoining',   '👋'); },
   get blobcool()      { return e('blobcool',      '😎'); },
@@ -149,18 +165,18 @@ export const EMOJI = {
   get blobhyper()     { return e('blobhyper',     '🤩'); },
   get blobthink()     { return e('blobthink',     '🤔'); },
   get blobheart()     { return e('blobheart',     '🥰'); },
-  get blobangry()     { return e('blobangry',     '😡'); },
+  get blobangry()     { return e('blobangry',     '😠'); },
   get blobangel()     { return e('blobangel',     '😇'); },
   get bloblthink()    { return e('bloblthink',    '🤔'); },
   get blobcoolthink() { return e('blobcoolthink', '🤔'); },
 
-  // ── Join / Leave ────────────────────────────────────────────────────────────
+  // ── Join / Leave ─────────────────────────────────────────────────────────────
   get join()          { return e('join',          '📥'); },
   get welcome()       { return e('blobjoining',   '👋'); },
   get leave()         { return e('leave',         '📤'); },
-  get leave2()        { return e('leave2',        '🚪'); },
+  get leave2()        { return e('leave2',        '👋'); },
 
-  // ── Hyper / Hype ────────────────────────────────────────────────────────────
+  // ── Hyper / Hype ─────────────────────────────────────────────────────────────
   get hyper()         { return e('hyper',         '🎉'); },
   get hyperpog()      { return e('hyperpog',      '😮'); },
   get hyperangry()    { return e('hyperangry',    '😤'); },
@@ -170,23 +186,23 @@ export const EMOJI = {
   get thinkzap()      { return e('thinkzap',      '⚡'); },
   get monkamega()     { return e('monkamega',     '😱'); },
 
-  // ── Moods ───────────────────────────────────────────────────────────────────
+  // ── Moods ────────────────────────────────────────────────────────────────────
   get triggered()     { return e('triggered',     '😤'); },
   get ghost()         { return e('ghost',         '👻'); },
   get ghostcat()      { return e('ghostcat',      '👻'); },
   get ghostcat2()     { return e('ghostcat2',     '👻'); },
   get stare()         { return e('stare',         '👀'); },
 
-  // ── Pandas ──────────────────────────────────────────────────────────────────
+  // ── Pandas ───────────────────────────────────────────────────────────────────
   get pandahyper()    { return e('pandahyper',    '🐼'); },
   get pandadevil()    { return e('pandadevil',    '🐼'); },
   get pandacool()     { return e('pandacool',     '🐼'); },
 
-  // ── Cool Animals ────────────────────────────────────────────────────────────
+  // ── Animals ──────────────────────────────────────────────────────────────────
   get cooldoge()      { return e('cooldoge',      '🐕'); },
   get awoocool()      { return e('awoocool',      '🐺'); },
 
-  // ── Static strings for nav/UI (always unicode — needed in button emojis) ────
+  // ── Static strings for nav/UI ─────────────────────────────────────────────────
   arrow:         '╰',
   arrowRight:    '➜',
   dot:           '◆',
@@ -200,7 +216,7 @@ export const EMOJI = {
   bell:          '🔔',
   mic:           '🎤',
 
-  // ── Aliases for backward compatibility ──────────────────────────────────────
+  // ── Aliases ────────────────────────────────────────────────────────────────
   get error()         { return e('warning',       '⚠️'); },
   get cross()         { return e('banned',        '❌'); },
   get loading()       { return '⏳'; },
@@ -239,7 +255,7 @@ export const EMOJI = {
   get offline()       { return '⚫'; },
   get info()          { return e('dbcheck',       'ℹ️'); },
 
-  // module labels (static unicode)
+  // module labels (static unicode — safe for buttons/selects)
   antinuke:      '🛡️',
   antibetray:    '🔐',
   emergency:     '🚨',
@@ -282,13 +298,20 @@ export function createEmbed(options = {}) {
   if (url)           embed.setURL(url);
   if (timestamp)     embed.setTimestamp();
 
-  embed.setFooter(
-    footer
-      ? (typeof footer === 'string' ? { text: footer } : footer)
-      : { text: `${EMOJI.sparkle} Lilith Protector  •  Premium Protection` }
-  );
+  // Discord footers CANNOT render custom emojis — sanitize them away
+  const rawFooter = footer
+    ? (typeof footer === 'string' ? { text: footer } : footer)
+    : { text: '✨ Lilith Protector  •  Premium Protection' };
 
-  if (author) embed.setAuthor(typeof author === 'string' ? { name: author } : author);
+  embed.setFooter({
+    ...rawFooter,
+    text: sanitizeText(rawFooter.text ?? ''),
+  });
+
+  if (author) {
+    const a = typeof author === 'string' ? { name: author } : author;
+    embed.setAuthor({ ...a, name: sanitizeText(a.name ?? '') });
+  }
 
   return embed;
 }
@@ -296,32 +319,30 @@ export function createEmbed(options = {}) {
 // ── Styled helper embeds ──────────────────────────────────────────────────────
 
 export function successEmbed(title, description, extra = {}) {
-  const em = EMOJI;
   return createEmbed({
     color: THEME.success,
-    title: `${em.check} ${title}`,
+    title: `✅  ${title}`,
     description: [
-      DIVIDER_FANCY,
+      DIVIDER_GLOW,
       ``,
       description,
       ``,
-      DIVIDER_FANCY,
+      DIVIDER_GLOW,
     ].join('\n'),
     ...extra,
   });
 }
 
 export function errorEmbed(title, description, extra = {}) {
-  const em = EMOJI;
   return createEmbed({
     color: THEME.error,
-    title: `${em.warning} ${title}`,
+    title: `⚠️  ${title}`,
     description: [
-      DIVIDER_FANCY,
+      DIVIDER_GLOW,
       ``,
       description,
       ``,
-      DIVIDER_FANCY,
+      DIVIDER_GLOW,
     ].join('\n'),
     ...extra,
   });
@@ -330,7 +351,7 @@ export function errorEmbed(title, description, extra = {}) {
 export function warningEmbed(title, description, extra = {}) {
   return createEmbed({
     color: THEME.warning,
-    title: `${EMOJI.warningpc} ${title}`,
+    title: `⚠️  ${title}`,
     description: [DIVIDER_STARS, ``, description, ``, DIVIDER_STARS].join('\n'),
     ...extra,
   });
@@ -339,7 +360,7 @@ export function warningEmbed(title, description, extra = {}) {
 export function infoEmbed(title, description, extra = {}) {
   return createEmbed({
     color: THEME.info,
-    title: `${EMOJI.dbcheck} ${title}`,
+    title: `ℹ️  ${title}`,
     description: [DIVIDER_STARS, ``, description, ``, DIVIDER_STARS].join('\n'),
     ...extra,
   });
@@ -348,18 +369,18 @@ export function infoEmbed(title, description, extra = {}) {
 export function loadingEmbed(title = 'Processing...') {
   return createEmbed({
     color: THEME.dark,
-    title: `${EMOJI.loading} ${title}`,
+    title: `⏳  ${title}`,
     description: `${DIVIDER_DOTS}\n*Please wait a moment...*\n${DIVIDER_DOTS}`,
     timestamp: false,
   });
 }
 
 export function moduleEmbed(emoji, title, commands, description = null) {
-  const cmdList = commands.map(c => `\`${c}\``).join(', ');
-  let desc = `${DIVIDER_FANCY}\n`;
-  if (description) desc += `\n${EMOJI.bullet} **${description}**\n\n`;
-  desc += cmdList + `\n${DIVIDER_FANCY}`;
-  return createEmbed({ color: THEME.primary, title: `${emoji} ${title}`, description: desc });
+  const cmdList = commands.map(c => `\`${c}\``).join('  ');
+  let desc = `${DIVIDER_FANCY}\n\n`;
+  if (description) desc += `${EMOJI.bullet} **${description}**\n\n`;
+  desc += cmdList + `\n\n${DIVIDER_FANCY}`;
+  return createEmbed({ color: THEME.primary, title: `${emoji}  ${title}`, description: desc });
 }
 
 // ── UI Components ─────────────────────────────────────────────────────────────
@@ -388,7 +409,7 @@ export function moduleSelectMenu(modules) {
   return new ActionRowBuilder().addComponents(
     new StringSelectMenuBuilder()
       .setCustomId('help_module_select')
-      .setPlaceholder('⚜️ Navigate to a module...')
+      .setPlaceholder('⚜️  Navigate to a module...')
       .addOptions(modules.map(m => ({
         label: m.name,
         value: m.value,
