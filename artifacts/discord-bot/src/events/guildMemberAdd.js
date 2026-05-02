@@ -1,4 +1,4 @@
-import { createEmbed, THEME, DIVIDER_FANCY, DIVIDER_STARS, DIVIDER_GLOW, EMOJI } from '../utils/embedBuilder.js';
+import { createEmbed, THEME, DIVIDER_STARS, h2, bold, italic, row, rowRaw, EMOJI } from '../utils/embedBuilder.js';
 import { getGreet, getAutoroles, getVanity, updateVanityUses } from '../utils/guildConfig.js';
 
 export const name = 'guildMemberAdd';
@@ -65,17 +65,14 @@ export async function execute(member) {
       color: THEME.success,
       title: `🎉  Welcome to ${guild.name}!`,
       description: [
-        DIVIDER_GLOW, ``,
-        `> 👋 **${member.user.username}** just joined the server!`,
+        h2(`👋 Welcome, ${member.user.username}!`),
+        `> *A new member has arrived in ${guild.name}.*`,
         ``,
-        DIVIDER_STARS,
-        `▸ **Mention** ────── ${member.user}`,
-        `▸ **Member #** ───── \`${memberNumber.toLocaleString()}\``,
-        `▸ **Account Age** ── \`${accountAge} day${accountAge !== 1 ? 's' : ''}\`${newAccount ? '  ⚠️ *New Account*' : ''}`,
-        `▸ **Joined** ──────── ${joinedAt}`,
-        msgText ? `\n${DIVIDER_STARS}\n${msgText}` : '',
-        ``,
-        DIVIDER_GLOW,
+        rowRaw('Mention', member.user),
+        row('Member #', memberNumber.toLocaleString()),
+        row('Account Age', `${accountAge} day${accountAge !== 1 ? 's' : ''}`) + (newAccount ? '  ⚠️ ' + italic('New Account') : ''),
+        rowRaw('Joined', joinedAt),
+        msgText ? `\n> ${italic(msgText)}` : '',
       ].filter(Boolean).join('\n'),
       thumbnail: member.user.displayAvatarURL({ dynamic: true, size: 256 }),
       footer: { text: `Lilith Protector  •  Member #${memberNumber.toLocaleString()}` },

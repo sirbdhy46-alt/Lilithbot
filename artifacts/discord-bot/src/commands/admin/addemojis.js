@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, PermissionFlagsBits, AttachmentBuilder } from 'discord.js';
-import { createEmbed, successEmbed, errorEmbed, loadingEmbed, THEME, DIVIDER_FANCY, DIVIDER_STARS, EMOJI } from '../../utils/embedBuilder.js';
+import { createEmbed, successEmbed, errorEmbed, loadingEmbed, THEME, DIVIDER_STARS, h2, h3, bold, code, row, italic, EMOJI } from '../../utils/embedBuilder.js';
 
 export const data = new SlashCommandBuilder()
   .setName('addemojis')
@@ -288,8 +288,8 @@ export async function execute(interaction) {
     const slots = maxEmojis - emojiCount;
 
     const packLines = Object.entries(PACKS).map(([key, emojis]) => {
-      const emoji = { blob: '🔵', hype: '🔥', cats: '🐱', pepe: '😂' }[key] ?? '📦';
-      return `${emoji} **${key}** — ${emojis.length} emojis`;
+      const icon = { blob: '🔵', hype: '🔥', cats: '🐱', pepe: '😂' }[key] ?? '📦';
+      return `> ${icon} ${bold(key)} — ${code(emojis.length + ' emojis')}`;
     });
 
     await interaction.reply({
@@ -297,17 +297,15 @@ export async function execute(interaction) {
         color: THEME.info,
         title: `${EMOJI.sparkle} Available Emoji Packs`,
         description: [
-          DIVIDER_FANCY, ``,
+          h2('📦 Emoji Packs'),
           ...packLines,
           ``,
-          DIVIDER_STARS,
-          `${EMOJI.bullet} **Server emoji slots used:** \`${emojiCount} / ${maxEmojis}\``,
-          `${EMOJI.bullet} **Free slots remaining:** \`${slots}\``,
+          h3('📊 Server Slots'),
+          row('Used', `${emojiCount} / ${maxEmojis}`),
+          row('Available', String(slots)),
           ``,
-          `Use \`/addemojis pack [name]\` to install a pack.`,
-          `Use \`/addemojis steal [message_id]\` to clone emojis from a message.`,
-          ``,
-          DIVIDER_FANCY,
+          `> ${italic('Use')} \`/addemojis pack [name]\` ${italic('to install a pack.')}`,
+          `> ${italic('Use')} \`/addemojis steal [message_id]\` ${italic('to clone emojis from a message.')}`,
         ].join('\n'),
       })],
     });
@@ -373,17 +371,15 @@ export async function execute(interaction) {
     await interaction.editReply({
       embeds: [createEmbed({
         color: ok > 0 ? THEME.success : THEME.error,
-        title: `${ok > 0 ? EMOJI.check : EMOJI.warning} Emoji Steal Complete`,
+        title: `${ok > 0 ? '✅' : '⚠️'}  Emoji Steal Complete`,
         description: [
-          DIVIDER_FANCY, ``,
-          `${EMOJI.bullet} **Added:** \`${ok}\``,
-          `${EMOJI.bullet} **Skipped (already exists):** \`${skipped}\``,
-          `${EMOJI.bullet} **Failed:** \`${failed}\``,
-          errors.length > 0 ? `\n${DIVIDER_STARS}\n${errors.slice(0, 5).join('\n')}` : '',
-          ``,
-          DIVIDER_FANCY,
+          h2('📊 Results'),
+          row('Added', String(ok)),
+          row('Skipped (already exists)', String(skipped)),
+          row('Failed', String(failed)),
+          errors.length > 0 ? `\n${h3('❌ Errors')}\n` + errors.slice(0, 5).map(e => `> ${e}`).join('\n') : '',
         ].filter(Boolean).join('\n'),
-        footer: { text: `${EMOJI.sparkle} Lilith Protector  •  Emoji Steal` },
+        footer: { text: 'Lilith Protector  •  Emoji Steal' },
       })],
     });
     return;
@@ -445,21 +441,19 @@ export async function execute(interaction) {
     await interaction.editReply({
       embeds: [createEmbed({
         color: ok > 0 ? THEME.success : THEME.error,
-        title: `${ok > 0 ? EMOJI.check : EMOJI.warning} ${packEmoji} Pack Install Complete`,
+        title: `${ok > 0 ? '✅' : '⚠️'}  ${packEmoji} Pack Install Complete`,
         description: [
-          DIVIDER_FANCY, ``,
-          `**Pack:** \`${packName}\` (${pack.length} total emojis)`,
+          h2(`${packEmoji} ${packName} Pack`),
+          `> ${italic(`${pack.length} emojis total`)}`,
           ``,
-          DIVIDER_STARS,
-          `${EMOJI.bullet} **Added:** \`${ok}\``,
-          `${EMOJI.bullet} **Skipped (already exists):** \`${skipped}\``,
-          `${EMOJI.bullet} **Failed:** \`${failed}\``,
-          skippedDueToSlots > 0 ? `${EMOJI.bullet} **Skipped (no slots):** \`${skippedDueToSlots}\`` : '',
-          errors.length > 0 ? `\n${DIVIDER_STARS}\n${errors.slice(0, 5).join('\n')}` : '',
-          ``,
-          DIVIDER_FANCY,
+          h3('📊 Results'),
+          row('Added', String(ok)),
+          row('Skipped (already exists)', String(skipped)),
+          row('Failed', String(failed)),
+          skippedDueToSlots > 0 ? row('Skipped (no slots)', String(skippedDueToSlots)) : '',
+          errors.length > 0 ? `\n${h3('❌ Errors')}\n` + errors.slice(0, 5).map(e => `> ${e}`).join('\n') : '',
         ].filter(Boolean).join('\n'),
-        footer: { text: `${EMOJI.sparkle} Lilith Protector  •  Emoji Packs` },
+        footer: { text: 'Lilith Protector  •  Emoji Packs' },
       })],
     });
   }

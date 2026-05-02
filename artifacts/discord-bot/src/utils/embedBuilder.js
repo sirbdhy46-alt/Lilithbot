@@ -5,35 +5,76 @@ import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-// ── Load custom application emojis ──────────────────────────────────────────
+// ── Load custom application emojis ───────────────────────────────────────────
 let C = {};
 const emojiPath = join(__dirname, '../../data/emojis.json');
 if (existsSync(emojiPath)) {
   try { C = JSON.parse(readFileSync(emojiPath, 'utf8')); } catch {}
 }
 
-// Validate that a custom emoji format is usable (has <:name:snowflake> shape)
+// Validate custom emoji format <:name:snowflake>
 const CUSTOM_EMOJI_RE = /^<a?:\w+:\d{17,20}>$/;
 function isValidCustomEmoji(format) {
   return typeof format === 'string' && CUSTOM_EMOJI_RE.test(format);
 }
 
-// Helper: get custom emoji format if valid, else Unicode fallback
+// Return custom emoji if valid, else Unicode fallback
 function e(key, fallback = '') {
   const format = C[`lp_${key}`]?.format;
   return isValidCustomEmoji(format) ? format : fallback;
 }
 
-// ── Strip custom emojis from footer/author text (Discord doesn't render them there)
+// Footers can NEVER render custom emojis — strip them
 function sanitizeText(text = '') {
   return text
-    .replace(/<a?:\w+:\d+>/g, '')   // remove <:name:id> and <a:name:id>
-    .replace(/:\w+:/g, '')           // remove :name: leftover
-    .replace(/\s{2,}/g, ' ')         // collapse double spaces
+    .replace(/<a?:\w+:\d+>/g, '')
+    .replace(/:\w+:/g, '')
+    .replace(/\s{2,}/g, ' ')
     .trim();
 }
 
-// ── Theme colors ─────────────────────────────────────────────────────────────
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  DISCORD TEXT FORMATTING HELPERS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+/** # Heading 1  (largest) */
+export const h1           = (t) => `# ${t}`;
+/** ## Heading 2  (medium) */
+export const h2           = (t) => `## ${t}`;
+/** ### Heading 3  (small) */
+export const h3           = (t) => `### ${t}`;
+
+/** *italic* */
+export const italic       = (t) => `*${t}*`;
+/** **bold** */
+export const bold         = (t) => `**${t}**`;
+/** ***bold italic*** */
+export const boldItalic   = (t) => `***${t}***`;
+/** __underline__ */
+export const underline    = (t) => `__${t}__`;
+/** __**bold underline**__ */
+export const boldUnder    = (t) => `__**${t}**__`;
+/** ~~strikethrough~~ */
+export const strike       = (t) => `~~${t}~~`;
+/** `inline code` */
+export const code         = (t) => `\`${t}\``;
+/** ```multi-line code block``` */
+export const codeBlock    = (t, lang = '') => `\`\`\`${lang}\n${t}\n\`\`\``;
+/** ||spoiler|| */
+export const spoiler      = (t) => `||${t}||`;
+/** > single line quote */
+export const quote        = (t) => `> ${t}`;
+/** >>> big block quote (spans rest of message) */
+export const bigQuote     = (t) => `>>> ${t}`;
+
+// Convenience: bold label + code value  →  **Label** — `value`
+export const field        = (label, value) => `${bold(label)} — ${code(value)}`;
+// Convenience: bullet row  →  ▸ **Label** ── `value`
+export const row          = (label, value) => `▸ ${bold(label)} ── ${code(String(value))}`;
+// Convenience: bullet row without code  →  ▸ **Label** ── value
+export const rowRaw       = (label, value) => `▸ ${bold(label)} ── ${value}`;
+
+// ── Theme colors ──────────────────────────────────────────────────────────────
 export const THEME = {
   primary:  0xE53E3E,
   success:  0x57F287,
@@ -46,7 +87,7 @@ export const THEME = {
   cyan:     0x00B0F4,
 };
 
-// ── Dividers ──────────────────────────────────────────────────────────────────
+// ── Dividers (keep for backwards compat) ─────────────────────────────────────
 export const DIVIDER       = '╔══════════════════════════╗';
 export const DIVIDER_END   = '╚══════════════════════════╝';
 export const DIVIDER_MID   = '╠══════════════════════════╣';
@@ -58,15 +99,15 @@ export const DIVIDER_FANCY = '◈━━━━━━━━━━━━━━━�
 export const DIVIDER_GLOW  = '⋆ ───────────────────── ⋆';
 export const DIVIDER_ROSE  = '❀ ─────────────────────── ❀';
 
-// ── EMOJI map — custom emoji with beautiful Unicode fallbacks ─────────────────
+// ── EMOJI map ─────────────────────────────────────────────────────────────────
 export const EMOJI = {
-  // ── Security & Shields ──────────────────────────────────────────────────────
+  // Security & Shields
   get shield()        { return e('shield',        '🛡️'); },
   get shield2()       { return e('shield2',       '🛡️'); },
   get dynoshield()    { return e('dynoshield',     '🛡️'); },
   get capshield()     { return e('capshield',      '🛡️'); },
 
-  // ── Ban & Punish ─────────────────────────────────────────────────────────────
+  // Ban & Punish
   get banhammer()     { return e('banhammer',     '🔨'); },
   get banhammer2()    { return e('banhammer2',    '🔨'); },
   get blobbanhammer() { return e('blobbanhammer', '🔨'); },
@@ -76,211 +117,170 @@ export const EMOJI = {
   get ban()           { return e('ban',            '🔨'); },
   get bancat()        { return e('bancat',         '🔨'); },
   get crowban()       { return e('crowban',        '🔨'); },
-  get drakeban()      { return e('drakeban',       '🔨'); },
   get feelsbanned()   { return e('feelsbanned',    '😔'); },
-  get hitomiban()     { return e('hitomiban',      '🚫'); },
   get linkban()       { return e('linkban',        '🔗'); },
 
-  // ── Warnings & Alerts ────────────────────────────────────────────────────────
+  // Warnings & Alerts
   get warning()       { return e('warning',       '⚠️'); },
   get warn()          { return e('warning',       '⚠️'); },
   get warningpc()     { return e('warningpc',     '⚠️'); },
 
-  // ── Police & Law ─────────────────────────────────────────────────────────────
+  // Police & Law
   get police()        { return e('police',        '👮'); },
-  get police2()       { return e('police2',       '👮'); },
-  get police3()       { return e('police3',       '👮'); },
   get blobpolice()    { return e('blobpolice',    '👮'); },
-  get hellopolice()   { return e('hellopolice',   '👮'); },
-  get nekopolice()    { return e('nekopolice',    '👮'); },
 
-  // ── Weapons & Destruction ────────────────────────────────────────────────────
+  // Weapons
   get nuke()          { return e('nuke',          '💣'); },
   get bomb()          { return e('bomb',          '💣'); },
   get sword()         { return e('sword',         '⚔️'); },
-  get blade()         { return e('blade',         '⚔️'); },
-  get redsaber()      { return e('redsaber',      '⚔️'); },
 
-  // ── Ninja & Action ───────────────────────────────────────────────────────────
+  // Ninja & Action
   get ninja()         { return e('ninja',         '🥷'); },
-  get ninjamad()      { return e('ninjamad',      '🥷'); },
   get blobninja()     { return e('blobninja',     '🥷'); },
   get blobsaluteban() { return e('blobsaluteban', '🫡'); },
 
-  // ── Dark / Evil ──────────────────────────────────────────────────────────────
+  // Dark / Evil
   get devil()         { return e('devil',         '😈'); },
-  get devilparrot()   { return e('devilparrot',   '😈'); },
-  get dark()          { return e('dark',          '🔥'); },
-  get darkness()      { return e('darkness',      '🌑'); },
   get dragon()        { return e('dragon',        '🐉'); },
 
-  // ── Status: Success ──────────────────────────────────────────────────────────
+  // Status
   get check()         { return e('check',         '✅'); },
   get checkblob()     { return e('checkblob',     '✅'); },
   get dbcheck()       { return e('dbcheck',       '✅'); },
 
-  // ── Prestige & Rank ──────────────────────────────────────────────────────────
+  // Prestige & Rank
   get vip()           { return e('vip',           '💎'); },
   get badge()         { return e('badge',         '🏅'); },
-  get frostellite()   { return e('frostellite',   '❄️'); },
   get crown()         { return e('crown',         '👑'); },
   get crown2()        { return e('crown2',        '👑'); },
-  get crown3()        { return e('crown3',        '👑'); },
   get king()          { return e('king',          '👑'); },
   get trophy()        { return e('trophy',        '🏆'); },
   get star()          { return e('star',          '⭐'); },
-  get gold()          { return e('gold',          '🥇'); },
   get diamond()       { return e('diamond',       '💎'); },
 
-  // ── Hype & Power ─────────────────────────────────────────────────────────────
+  // Hype & Power
   get fire()          { return e('fire',          '🔥'); },
   get zap()           { return e('zap',           '⚡'); },
   get boost()         { return e('boost',         '🚀'); },
-  get boostArt()      { return e('boostArt',      '🚀'); },
-  get pepepower()     { return e('pepepower',     '💪'); },
 
-  // ── Hearts & Love ────────────────────────────────────────────────────────────
+  // Hearts
   get love()          { return e('love',          '❤️'); },
   get heart()         { return e('heart',         '💖'); },
-  get heartbeat()     { return e('heartbeat',     '💗'); },
 
-  // ── Sparkles ─────────────────────────────────────────────────────────────────
+  // Sparkles
   get sparkle()       { return e('sparkle',       '✨'); },
-  get sparkle2()      { return e('sparkle2',      '✨'); },
-  get sparkle3()      { return e('sparkle3',      '✨'); },
-  get nekosparkle()   { return e('nekosparkle',   '✨'); },
-  get sparklepeek()   { return e('sparklepeek',   '✨'); },
   get sparkles()      { return e('sparkle',       '✨'); },
   get success()       { return e('sparkle',       '✨'); },
 
-  // ── Bot ──────────────────────────────────────────────────────────────────────
+  // Bot
   get bot()           { return e('bot',           '🤖'); },
-  get bottag()        { return e('bottag',        '🤖'); },
 
-  // ── Blob Emotions ────────────────────────────────────────────────────────────
+  // Blob Emotions
   get blobwave()      { return e('blobwave',      '👋'); },
   get blobjoining()   { return e('blobjoining',   '👋'); },
   get blobcool()      { return e('blobcool',      '😎'); },
-  get blobcool2()     { return e('blobcool2',     '😎'); },
   get blobhyper()     { return e('blobhyper',     '🤩'); },
   get blobthink()     { return e('blobthink',     '🤔'); },
   get blobheart()     { return e('blobheart',     '🥰'); },
   get blobangry()     { return e('blobangry',     '😠'); },
   get blobangel()     { return e('blobangel',     '😇'); },
-  get bloblthink()    { return e('bloblthink',    '🤔'); },
-  get blobcoolthink() { return e('blobcoolthink', '🤔'); },
 
-  // ── Join / Leave ─────────────────────────────────────────────────────────────
+  // Join / Leave
   get join()          { return e('join',          '📥'); },
   get welcome()       { return e('blobjoining',   '👋'); },
   get leave()         { return e('leave',         '📤'); },
   get leave2()        { return e('leave2',        '👋'); },
 
-  // ── Hyper / Hype ─────────────────────────────────────────────────────────────
+  // Hype
   get hyper()         { return e('hyper',         '🎉'); },
   get hyperpog()      { return e('hyperpog',      '😮'); },
-  get hyperangry()    { return e('hyperangry',    '😤'); },
-  get hyperdab()      { return e('hyperdab',      '🤙'); },
   get hyperpinged()   { return e('hyperpinged',   '📣'); },
-  get hyperthink()    { return e('hyperthink',    '🤔'); },
-  get thinkzap()      { return e('thinkzap',      '⚡'); },
   get monkamega()     { return e('monkamega',     '😱'); },
 
-  // ── Moods ────────────────────────────────────────────────────────────────────
+  // Moods
   get triggered()     { return e('triggered',     '😤'); },
   get ghost()         { return e('ghost',         '👻'); },
-  get ghostcat()      { return e('ghostcat',      '👻'); },
-  get ghostcat2()     { return e('ghostcat2',     '👻'); },
   get stare()         { return e('stare',         '👀'); },
 
-  // ── Pandas ───────────────────────────────────────────────────────────────────
-  get pandahyper()    { return e('pandahyper',    '🐼'); },
-  get pandadevil()    { return e('pandadevil',    '🐼'); },
-  get pandacool()     { return e('pandacool',     '🐼'); },
+  // Static nav/UI strings
+  arrow:      '╰',
+  arrowRight: '➜',
+  dot:        '◆',
+  bullet:     '▸',
+  next:       '▶️',
+  prev:       '◀️',
+  first:      '⏮️',
+  last:       '⏭️',
+  close:      '✖️',
+  bell:       '🔔',
 
-  // ── Animals ──────────────────────────────────────────────────────────────────
-  get cooldoge()      { return e('cooldoge',      '🐕'); },
-  get awoocool()      { return e('awoocool',      '🐺'); },
+  // Aliases
+  get error()    { return e('warning',    '⚠️'); },
+  get cross()    { return e('banned',     '❌'); },
+  get loading()  { return '⏳'; },
+  get ping()     { return e('hyperpinged','📡'); },
+  get owner()    { return e('king',       '👑'); },
+  get admin()    { return e('dynoshield', '🛡️'); },
+  get gem()      { return e('diamond',    '💎'); },
+  get lock()     { return e('blobpolice', '🔒'); },
+  get unlock()   { return '🔓'; },
+  get slow()     { return '🐌'; },
+  get mute()     { return '🔇'; },
+  get unmute()   { return '🔊'; },
+  get kick()     { return e('blobninja',  '👢'); },
+  get user()     { return e('blobcool',   '👤'); },
+  get users()    { return '👥'; },
+  get role()     { return e('badge',      '🎭'); },
+  get server()   { return e('dynoshield', '🏠'); },
+  get channel()  { return '📢'; },
+  get settings() { return e('dbcheck',   '⚙️'); },
+  get wrench()   { return '🔧'; },
+  get hammer()   { return e('banhammer', '🔨'); },
+  get chart()    { return '📊'; },
+  get search()   { return '🔍'; },
+  get calendar() { return '📅'; },
+  get time()     { return '🕒'; },
+  get link()     { return e('linkban',   '🔗'); },
+  get pin()      { return '📌'; },
+  get stats()    { return '📈'; },
+  get thunder()  { return e('zap',       '⚡'); },
+  get gift()     { return '🎁'; },
+  get giveaway() { return '🎁'; },
+  get ticket()   { return '🎟️'; },
+  get online()   { return '🟢'; },
+  get idle()     { return '🟡'; },
+  get dnd()      { return '🔴'; },
+  get offline()  { return '⚫'; },
+  get info()     { return e('dbcheck',   'ℹ️'); },
 
-  // ── Static strings for nav/UI ─────────────────────────────────────────────────
-  arrow:         '╰',
-  arrowRight:    '➜',
-  dot:           '◆',
-  bullet:        '▸',
-  next:          '▶️',
-  prev:          '◀️',
-  first:         '⏮️',
-  last:          '⏭️',
-  close:         '✖️',
-  slash:         '/',
-  bell:          '🔔',
-  mic:           '🎤',
-
-  // ── Aliases ────────────────────────────────────────────────────────────────
-  get error()         { return e('warning',       '⚠️'); },
-  get cross()         { return e('banned',        '❌'); },
-  get loading()       { return '⏳'; },
-  get ping()          { return e('hyperpinged',   '📡'); },
-  get owner()         { return e('king',          '👑'); },
-  get admin()         { return e('dynoshield',    '🛡️'); },
-  get gem()           { return e('diamond',       '💎'); },
-  get lock()          { return e('blobpolice',    '🔒'); },
-  get unlock()        { return '🔓'; },
-  get slow()          { return '🐌'; },
-  get mute()          { return '🔇'; },
-  get unmute()        { return '🔊'; },
-  get kick()          { return e('blobninja',     '👢'); },
-  get user()          { return e('blobcool2',     '👤'); },
-  get users()         { return '👥'; },
-  get role()          { return e('badge',         '🎭'); },
-  get server()        { return e('dynoshield',    '🏠'); },
-  get channel()       { return '📢'; },
-  get settings()      { return e('dbcheck',       '⚙️'); },
-  get wrench()        { return '🔧'; },
-  get hammer()        { return e('banhammer',     '🔨'); },
-  get chart()         { return '📊'; },
-  get search()        { return '🔍'; },
-  get calendar()      { return '📅'; },
-  get time()          { return '🕒'; },
-  get link()          { return e('linkban',       '🔗'); },
-  get pin()           { return '📌'; },
-  get stats()         { return '📈'; },
-  get thunder()       { return e('zap',           '⚡'); },
-  get gift()          { return '🎁'; },
-  get giveaway()      { return '🎁'; },
-  get ticket()        { return '🎟️'; },
-  get online()        { return '🟢'; },
-  get idle()          { return '🟡'; },
-  get dnd()           { return '🔴'; },
-  get offline()       { return '⚫'; },
-  get info()          { return e('dbcheck',       'ℹ️'); },
-
-  // module labels (static unicode — safe for buttons/selects)
-  antinuke:      '🛡️',
-  antibetray:    '🔐',
-  emergency:     '🚨',
-  limit:         '🔢',
-  automod:       '🤖',
-  fun:           '🎮',
-  moderation:    '⚔️',
-  utility:       '🔧',
-  boycott:       '⭐',
-  automations:   '✅',
-  voice:         '🎙️',
-  ignore:        '🔕',
-  home:          '🏠',
-  mail:          '📬',
-  coin:          '🪙',
-  money:         '💰',
-  music:         '🎵',
-  private:       '🔒',
-  public:        '🔓',
-  nitro:         '💜',
-  invite:        '💌',
-  category:      '📁',
+  // Module labels (always Unicode — safe for buttons/selects)
+  antinuke:   '🛡️',
+  antibetray: '🔐',
+  emergency:  '🚨',
+  limit:      '🔢',
+  automod:    '🤖',
+  fun:        '🎮',
+  moderation: '⚔️',
+  utility:    '🔧',
+  boycott:    '⭐',
+  automations:'✅',
+  voice:      '🎙️',
+  ignore:     '🔕',
+  home:       '🏠',
+  mail:       '📬',
+  coin:       '🪙',
+  money:      '💰',
+  music:      '🎵',
+  private:    '🔒',
+  public:     '🔓',
+  nitro:      '💜',
+  invite:     '💌',
+  category:   '📁',
 };
 
-// ── Core embed builder ────────────────────────────────────────────────────────
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  CORE EMBED BUILDER
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 export function createEmbed(options = {}) {
   const {
     title, description, color = THEME.primary,
@@ -298,15 +298,12 @@ export function createEmbed(options = {}) {
   if (url)           embed.setURL(url);
   if (timestamp)     embed.setTimestamp();
 
-  // Discord footers CANNOT render custom emojis — sanitize them away
+  // Footers CANNOT render custom emojis — sanitize every time
   const rawFooter = footer
     ? (typeof footer === 'string' ? { text: footer } : footer)
     : { text: '✨ Lilith Protector  •  Premium Protection' };
 
-  embed.setFooter({
-    ...rawFooter,
-    text: sanitizeText(rawFooter.text ?? ''),
-  });
+  embed.setFooter({ ...rawFooter, text: sanitizeText(rawFooter.text ?? '') });
 
   if (author) {
     const a = typeof author === 'string' ? { name: author } : author;
@@ -316,74 +313,89 @@ export function createEmbed(options = {}) {
   return embed;
 }
 
-// ── Styled helper embeds ──────────────────────────────────────────────────────
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  STYLED HELPER EMBEDS  (using Discord native formatting)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+/**
+ * ✅ Success embed
+ * >>> ✅ **title**
+ * description
+ */
 export function successEmbed(title, description, extra = {}) {
   return createEmbed({
     color: THEME.success,
     title: `✅  ${title}`,
-    description: [
-      DIVIDER_GLOW,
-      ``,
-      description,
-      ``,
-      DIVIDER_GLOW,
-    ].join('\n'),
+    description: `>>> ${description}`,
     ...extra,
   });
 }
 
+/**
+ * ⚠️ Error embed
+ * > ⚠️ **title**
+ * description
+ */
 export function errorEmbed(title, description, extra = {}) {
   return createEmbed({
     color: THEME.error,
     title: `⚠️  ${title}`,
-    description: [
-      DIVIDER_GLOW,
-      ``,
-      description,
-      ``,
-      DIVIDER_GLOW,
-    ].join('\n'),
+    description: `> ${description}`,
     ...extra,
   });
 }
 
+/**
+ * ⚠️ Warning embed  (yellow)
+ */
 export function warningEmbed(title, description, extra = {}) {
   return createEmbed({
     color: THEME.warning,
     title: `⚠️  ${title}`,
-    description: [DIVIDER_STARS, ``, description, ``, DIVIDER_STARS].join('\n'),
+    description: `> ${description}`,
     ...extra,
   });
 }
 
+/**
+ * ℹ️ Info embed
+ */
 export function infoEmbed(title, description, extra = {}) {
   return createEmbed({
     color: THEME.info,
     title: `ℹ️  ${title}`,
-    description: [DIVIDER_STARS, ``, description, ``, DIVIDER_STARS].join('\n'),
+    description: `> ${description}`,
     ...extra,
   });
 }
 
+/**
+ * ⏳ Loading embed
+ */
 export function loadingEmbed(title = 'Processing...') {
   return createEmbed({
     color: THEME.dark,
     title: `⏳  ${title}`,
-    description: `${DIVIDER_DOTS}\n*Please wait a moment...*\n${DIVIDER_DOTS}`,
+    description: `> *Please wait a moment...*`,
     timestamp: false,
   });
 }
 
+/**
+ * Module embed — used in /help command
+ */
 export function moduleEmbed(emoji, title, commands, description = null) {
   const cmdList = commands.map(c => `\`${c}\``).join('  ');
-  let desc = `${DIVIDER_FANCY}\n\n`;
-  if (description) desc += `${EMOJI.bullet} **${description}**\n\n`;
-  desc += cmdList + `\n\n${DIVIDER_FANCY}`;
-  return createEmbed({ color: THEME.primary, title: `${emoji}  ${title}`, description: desc });
+  const lines = [
+    description ? `> ***${description}***\n` : '',
+    cmdList,
+  ].filter(Boolean).join('\n');
+  return createEmbed({ color: THEME.primary, title: `${emoji}  ${title}`, description: lines });
 }
 
-// ── UI Components ─────────────────────────────────────────────────────────────
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  UI COMPONENTS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 export function helpNavButtons(currentPage, totalPages, customId = 'help') {
   return new ActionRowBuilder().addComponents(

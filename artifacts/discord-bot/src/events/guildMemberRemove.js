@@ -1,4 +1,4 @@
-import { createEmbed, THEME, DIVIDER_FANCY, DIVIDER_STARS, DIVIDER_GLOW, EMOJI } from '../utils/embedBuilder.js';
+import { createEmbed, THEME, h2, bold, italic, row, rowRaw } from '../utils/embedBuilder.js';
 import { getGoodbye } from '../utils/guildConfig.js';
 
 export const name = 'guildMemberRemove';
@@ -18,18 +18,17 @@ export async function execute(member) {
     color: 0x2B2D31,
     title: `👋  ${member.user.username} left the server`,
     description: [
-      DIVIDER_GLOW, ``,
-      `> ${member.user} has left **${guild.name}**.`,
+      h2(`👋 Goodbye, ${member.user.username}`),
+      `> *${bold(member.user.username)} has left ${guild.name}.*`,
       ``,
-      DIVIDER_STARS,
-      `▸ **User** ────────── ${member.user}`,
-      joinedAgo !== null ? `▸ **Was here for** ── \`${joinedAgo} day${joinedAgo !== 1 ? 's' : ''}\`` : '',
-      `▸ **Members now** ── \`${guild.memberCount.toLocaleString()}\``,
+      rowRaw('User', member.user),
+      joinedAgo !== null ? row('Was here for', `${joinedAgo} day${joinedAgo !== 1 ? 's' : ''}`) : '',
+      row('Members now', guild.memberCount.toLocaleString()),
       ``,
-      DIVIDER_GLOW,
+      `> ${italic('This message auto-deletes in 23 seconds.')}`,
     ].filter(Boolean).join('\n'),
     thumbnail: member.user.displayAvatarURL({ dynamic: true }),
-    footer: { text: `Lilith Protector  •  Goodbye ${member.user.username}  •  Auto-deletes in 23s` },
+    footer: { text: `Lilith Protector  •  Goodbye ${member.user.username}` },
   });
 
   const goodbye = getGoodbye(guildId);
