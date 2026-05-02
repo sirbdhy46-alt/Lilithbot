@@ -1,0 +1,617 @@
+{
+  "lp_shield": {
+    "id": "1499967201317224528",
+    "name": "lp_shield",
+    "format": "<:lp_shield:1499967201317224528>"
+  },
+  "lp_shield2": {
+    "id": "1499967203976675388",
+    "name": "lp_shield2",
+    "format": "<:lp_shield2:1499967203976675388>"
+  },
+  "lp_dynoshield": {
+    "id": "1499967206333743186",
+    "name": "lp_dynoshield",
+    "format": "<:lp_dynoshield:1499967206333743186>"
+  },
+  "lp_capshield": {
+    "id": "1499967209332670514",
+    "name": "lp_capshield",
+    "format": "<:lp_capshield:1499967209332670514>"
+  },
+  "lp_banhammer": {
+    "id": "1499967211954110484",
+    "name": "lp_banhammer",
+    "format": "<:lp_banhammer:1499967211954110484>"
+  },
+  "lp_banhammer2": {
+    "id": "1499967214269501501",
+    "name": "lp_banhammer2",
+    "format": "<:lp_banhammer2:1499967214269501501>"
+  },
+  "lp_blobbanhammer": {
+    "id": "1499967217306177682",
+    "name": "lp_blobbanhammer",
+    "format": "<:lp_blobbanhammer:1499967217306177682>"
+  },
+  "lp_bancouncil": {
+    "id": "1499967220044796045",
+    "name": "lp_bancouncil",
+    "format": "<:lp_bancouncil:1499967220044796045>"
+  },
+  "lp_banned": {
+    "id": "1499967223186456910",
+    "name": "lp_banned",
+    "format": "<:lp_banned:1499967223186456910>"
+  },
+  "lp_anibanned": {
+    "id": "1499967226424328292",
+    "name": "lp_anibanned",
+    "format": "<:lp_anibanned:1499967226424328292>"
+  },
+  "lp_ban": {
+    "id": "1499967230648258580",
+    "name": "lp_ban",
+    "format": "<:lp_ban:1499967230648258580>"
+  },
+  "lp_bancat": {
+    "id": "1499967233512837120",
+    "name": "lp_bancat",
+    "format": "<:lp_bancat:1499967233512837120>"
+  },
+  "lp_crowban": {
+    "id": "1499967236683595928",
+    "name": "lp_crowban",
+    "format": "<:lp_crowban:1499967236683595928>"
+  },
+  "lp_drakeban": {
+    "id": "1499967239955157092",
+    "name": "lp_drakeban",
+    "format": "<:lp_drakeban:1499967239955157092>"
+  },
+  "lp_feelsbanned": {
+    "id": "1499967242576855203",
+    "name": "lp_feelsbanned",
+    "format": "<:lp_feelsbanned:1499967242576855203>"
+  },
+  "lp_hitomiban": {
+    "id": "1499967245579849891",
+    "name": "lp_hitomiban",
+    "format": "<:lp_hitomiban:1499967245579849891>"
+  },
+  "lp_linkban": {
+    "id": "1499967248830562345",
+    "name": "lp_linkban",
+    "format": "<:lp_linkban:1499967248830562345>"
+  },
+  "lp_warning": {
+    "id": "1499967251967639744",
+    "name": "lp_warning",
+    "format": "<:lp_warning:1499967251967639744>"
+  },
+  "lp_warningpc": {
+    "id": "1499967255079813253",
+    "name": "lp_warningpc",
+    "format": "<:lp_warningpc:1499967255079813253>"
+  },
+  "lp_police": {
+    "id": "1499967257915293868",
+    "name": "lp_police",
+    "format": "<:lp_police:1499967257915293868>"
+  },
+  "lp_police2": {
+    "id": "1499967261308485804",
+    "name": "lp_police2",
+    "format": "<:lp_police2:1499967261308485804>"
+  },
+  "lp_police3": {
+    "id": "1499967264030593024",
+    "name": "lp_police3",
+    "format": "<:lp_police3:1499967264030593024>"
+  },
+  "lp_blobpolice": {
+    "id": "1499967267084177431",
+    "name": "lp_blobpolice",
+    "format": "<:lp_blobpolice:1499967267084177431>"
+  },
+  "lp_hellopolice": {
+    "id": "1499967269986631721",
+    "name": "lp_hellopolice",
+    "format": "<:lp_hellopolice:1499967269986631721>"
+  },
+  "lp_nekopolice": {
+    "id": "1499967273085964408",
+    "name": "lp_nekopolice",
+    "format": "<:lp_nekopolice:1499967273085964408>"
+  },
+  "lp_nuke": {
+    "id": "1499967275653136537",
+    "name": "lp_nuke",
+    "format": "<:lp_nuke:1499967275653136537>"
+  },
+  "lp_bomb": {
+    "id": "1499967278257541142",
+    "name": "lp_bomb",
+    "format": "<:lp_bomb:1499967278257541142>"
+  },
+  "lp_sword": {
+    "id": "1499967281017524306",
+    "name": "lp_sword",
+    "format": "<:lp_sword:1499967281017524306>"
+  },
+  "lp_blade": {
+    "id": "1499967283622187159",
+    "name": "lp_blade",
+    "format": "<:lp_blade:1499967283622187159>"
+  },
+  "lp_redsaber": {
+    "id": "1499967286067593307",
+    "name": "lp_redsaber",
+    "format": "<:lp_redsaber:1499967286067593307>"
+  },
+  "lp_ninja": {
+    "id": "1499967288693227614",
+    "name": "lp_ninja",
+    "format": "<:lp_ninja:1499967288693227614>"
+  },
+  "lp_ninjamad": {
+    "id": "1499967291545227439",
+    "name": "lp_ninjamad",
+    "format": "<:lp_ninjamad:1499967291545227439>"
+  },
+  "lp_blobninja": {
+    "id": "1499967294812454933",
+    "name": "lp_blobninja",
+    "format": "<:lp_blobninja:1499967294812454933>"
+  },
+  "lp_blobsaluteban": {
+    "id": "1499967297509523547",
+    "name": "lp_blobsaluteban",
+    "format": "<:lp_blobsaluteban:1499967297509523547>"
+  },
+  "lp_devil": {
+    "id": "1499967301162766347",
+    "name": "lp_devil",
+    "format": "<:lp_devil:1499967301162766347>"
+  },
+  "lp_devilparrot": {
+    "id": "1499967304350568640",
+    "name": "lp_devilparrot",
+    "format": "<:lp_devilparrot:1499967304350568640>"
+  },
+  "lp_dark": {
+    "id": "1499967306930061442",
+    "name": "lp_dark",
+    "format": "<:lp_dark:1499967306930061442>"
+  },
+  "lp_darkness": {
+    "id": "1499967309643513948",
+    "name": "lp_darkness",
+    "format": "<:lp_darkness:1499967309643513948>"
+  },
+  "lp_dragon": {
+    "id": "1499967312537714731",
+    "name": "lp_dragon",
+    "format": "<:lp_dragon:1499967312537714731>"
+  },
+  "lp_check": {
+    "id": "1499967316992069704",
+    "name": "lp_check",
+    "format": "<:lp_check:1499967316992069704>"
+  },
+  "lp_checkblob": {
+    "id": "1499967320179740716",
+    "name": "lp_checkblob",
+    "format": "<:lp_checkblob:1499967320179740716>"
+  },
+  "lp_dbcheck": {
+    "id": "1499967323367280650",
+    "name": "lp_dbcheck",
+    "format": "<:lp_dbcheck:1499967323367280650>"
+  },
+  "lp_vip": {
+    "id": "1499967325993041950",
+    "name": "lp_vip",
+    "format": "<:lp_vip:1499967325993041950>"
+  },
+  "lp_badge": {
+    "id": "1499967328832585820",
+    "name": "lp_badge",
+    "format": "<:lp_badge:1499967328832585820>"
+  },
+  "lp_frostellite": {
+    "id": "1499967332079108268",
+    "name": "lp_frostellite",
+    "format": "<:lp_frostellite:1499967332079108268>"
+  },
+  "lp_crown": {
+    "id": "1499967336294383706",
+    "name": "lp_crown",
+    "format": "<:lp_crown:1499967336294383706>"
+  },
+  "lp_crown2": {
+    "id": "1499967341277220895",
+    "name": "lp_crown2",
+    "format": "<:lp_crown2:1499967341277220895>"
+  },
+  "lp_crown3": {
+    "id": "1499967345475719219",
+    "name": "lp_crown3",
+    "format": "<:lp_crown3:1499967345475719219>"
+  },
+  "lp_king": {
+    "id": "1499967349015576821",
+    "name": "lp_king",
+    "format": "<:lp_king:1499967349015576821>"
+  },
+  "lp_trophy": {
+    "id": "1499967352253710468",
+    "name": "lp_trophy",
+    "format": "<:lp_trophy:1499967352253710468>"
+  },
+  "lp_star": {
+    "id": "1499967355793440979",
+    "name": "lp_star",
+    "format": "<:lp_star:1499967355793440979>"
+  },
+  "lp_gold": {
+    "id": "1499967358255632441",
+    "name": "lp_gold",
+    "format": "<:lp_gold:1499967358255632441>"
+  },
+  "lp_diamond": {
+    "id": "1499967361367801957",
+    "name": "lp_diamond",
+    "format": "<:lp_diamond:1499967361367801957>"
+  },
+  "lp_fire": {
+    "id": "1499967365390270495",
+    "name": "lp_fire",
+    "format": "<:lp_fire:1499967365390270495>"
+  },
+  "lp_zap": {
+    "id": "1499967367537623131",
+    "name": "lp_zap",
+    "format": "<:lp_zap:1499967367537623131>"
+  },
+  "lp_boost": {
+    "id": "1499967371811749968",
+    "name": "lp_boost",
+    "format": "<:lp_boost:1499967371811749968>"
+  },
+  "lp_boostArt": {
+    "id": "1499967375045300256",
+    "name": "lp_boostArt",
+    "format": "<:lp_boostArt:1499967375045300256>"
+  },
+  "lp_pepepower": {
+    "id": "1499967378174246922",
+    "name": "lp_pepepower",
+    "format": "<:lp_pepepower:1499967378174246922>"
+  },
+  "lp_love": {
+    "id": "1499967381475426476",
+    "name": "lp_love",
+    "format": "<:lp_love:1499967381475426476>"
+  },
+  "lp_heart": {
+    "id": "1499967384289673246",
+    "name": "lp_heart",
+    "format": "<:lp_heart:1499967384289673246>"
+  },
+  "lp_heartbeat": {
+    "id": "1499967386760249406",
+    "name": "lp_heartbeat",
+    "format": "<:lp_heartbeat:1499967386760249406>"
+  },
+  "lp_sparkle": {
+    "id": "1499967390077943879",
+    "name": "lp_sparkle",
+    "format": "<:lp_sparkle:1499967390077943879>"
+  },
+  "lp_sparkle2": {
+    "id": "1499967392590332037",
+    "name": "lp_sparkle2",
+    "format": "<:lp_sparkle2:1499967392590332037>"
+  },
+  "lp_sparkle3": {
+    "id": "1499967395769483394",
+    "name": "lp_sparkle3",
+    "format": "<:lp_sparkle3:1499967395769483394>"
+  },
+  "lp_nekosparkle": {
+    "id": "1499967398693048453",
+    "name": "lp_nekosparkle",
+    "format": "<:lp_nekosparkle:1499967398693048453>"
+  },
+  "lp_sparklepeek": {
+    "id": "1499967402610528367",
+    "name": "lp_sparklepeek",
+    "format": "<:lp_sparklepeek:1499967402610528367>"
+  },
+  "lp_bot": {
+    "id": "1499967405156339854",
+    "name": "lp_bot",
+    "format": "<:lp_bot:1499967405156339854>"
+  },
+  "lp_bottag": {
+    "id": "1499967407719186616",
+    "name": "lp_bottag",
+    "format": "<:lp_bottag:1499967407719186616>"
+  },
+  "lp_blobwave": {
+    "id": "1499967410847879179",
+    "name": "lp_blobwave",
+    "format": "<:lp_blobwave:1499967410847879179>"
+  },
+  "lp_blobjoining": {
+    "id": "1499967413632897115",
+    "name": "lp_blobjoining",
+    "format": "<:lp_blobjoining:1499967413632897115>"
+  },
+  "lp_blobcool": {
+    "id": "1499967416590012447",
+    "name": "lp_blobcool",
+    "format": "<:lp_blobcool:1499967416590012447>"
+  },
+  "lp_blobcool2": {
+    "id": "1499967420205502494",
+    "name": "lp_blobcool2",
+    "format": "<:lp_blobcool2:1499967420205502494>"
+  },
+  "lp_blobhyper": {
+    "id": "1499967423791632395",
+    "name": "lp_blobhyper",
+    "format": "<:lp_blobhyper:1499967423791632395>"
+  },
+  "lp_blobthink": {
+    "id": "1499967426962391181",
+    "name": "lp_blobthink",
+    "format": "<:lp_blobthink:1499967426962391181>"
+  },
+  "lp_blobheart": {
+    "id": "1499967430498324540",
+    "name": "lp_blobheart",
+    "format": "<:lp_blobheart:1499967430498324540>"
+  },
+  "lp_blobangry": {
+    "id": "1499967433719545958",
+    "name": "lp_blobangry",
+    "format": "<:lp_blobangry:1499967433719545958>"
+  },
+  "lp_blobangel": {
+    "id": "1499967437825900634",
+    "name": "lp_blobangel",
+    "format": "<:lp_blobangel:1499967437825900634>"
+  },
+  "lp_bloblthink": {
+    "id": "1499967441407578144",
+    "name": "lp_bloblthink",
+    "format": "<:lp_bloblthink:1499967441407578144>"
+  },
+  "lp_blobcoolthink": {
+    "id": "1499967444217892884",
+    "name": "lp_blobcoolthink",
+    "format": "<:lp_blobcoolthink:1499967444217892884>"
+  },
+  "lp_join": {
+    "id": "1499967446612967470",
+    "name": "lp_join",
+    "format": "<:lp_join:1499967446612967470>"
+  },
+  "lp_leave": {
+    "id": "1499967449817284619",
+    "name": "lp_leave",
+    "format": "<:lp_leave:1499967449817284619>"
+  },
+  "lp_leave2": {
+    "id": "1499967452069494936",
+    "name": "lp_leave2",
+    "format": "<:lp_leave2:1499967452069494936>"
+  },
+  "lp_hyper": {
+    "id": "1499967455676600330",
+    "name": "lp_hyper",
+    "format": "<:lp_hyper:1499967455676600330>"
+  },
+  "lp_hyperpog": {
+    "id": "1499967459141353534",
+    "name": "lp_hyperpog",
+    "format": "<:lp_hyperpog:1499967459141353534>"
+  },
+  "lp_hyperangry": {
+    "id": "1499967461494226946",
+    "name": "lp_hyperangry",
+    "format": "<:lp_hyperangry:1499967461494226946>"
+  },
+  "lp_hyperdab": {
+    "id": "1499967464661061676",
+    "name": "lp_hyperdab",
+    "format": "<:lp_hyperdab:1499967464661061676>"
+  },
+  "lp_hyperpinged": {
+    "id": "1499967468268163122",
+    "name": "lp_hyperpinged",
+    "format": "<:lp_hyperpinged:1499967468268163122>"
+  },
+  "lp_hyperthink": {
+    "id": "1499967471187136615",
+    "name": "lp_hyperthink",
+    "format": "<:lp_hyperthink:1499967471187136615>"
+  },
+  "lp_thinkzap": {
+    "id": "1499967473771086006",
+    "name": "lp_thinkzap",
+    "format": "<:lp_thinkzap:1499967473771086006>"
+  },
+  "lp_monkamega": {
+    "id": "1499967476690190377",
+    "name": "lp_monkamega",
+    "format": "<:lp_monkamega:1499967476690190377>"
+  },
+  "lp_triggered": {
+    "id": "1499967479781396591",
+    "name": "lp_triggered",
+    "format": "<:lp_triggered:1499967479781396591>"
+  },
+  "lp_ghost": {
+    "id": "1499967483698872460",
+    "name": "lp_ghost",
+    "format": "<:lp_ghost:1499967483698872460>"
+  },
+  "lp_ghostcat": {
+    "id": "1499967486207197234",
+    "name": "lp_ghostcat",
+    "format": "<:lp_ghostcat:1499967486207197234>"
+  },
+  "lp_ghostcat2": {
+    "id": "1499967488857735189",
+    "name": "lp_ghostcat2",
+    "format": "<:lp_ghostcat2:1499967488857735189>"
+  },
+  "lp_stare": {
+    "id": "1499967491303276555",
+    "name": "lp_stare",
+    "format": "<:lp_stare:1499967491303276555>"
+  },
+  "lp_pandahyper": {
+    "id": "1499967494843273286",
+    "name": "lp_pandahyper",
+    "format": "<:lp_pandahyper:1499967494843273286>"
+  },
+  "lp_pandadevil": {
+    "id": "1499967500874416218",
+    "name": "lp_pandadevil",
+    "format": "<:lp_pandadevil:1499967500874416218>"
+  },
+  "lp_pandacool": {
+    "id": "1499967504217407649",
+    "name": "lp_pandacool",
+    "format": "<:lp_pandacool:1499967504217407649>"
+  },
+  "lp_cooldoge": {
+    "id": "1499967507321327686",
+    "name": "lp_cooldoge",
+    "format": "<:lp_cooldoge:1499967507321327686>"
+  },
+  "lp_awoocool": {
+    "id": "1499967511062384664",
+    "name": "lp_awoocool",
+    "format": "<:lp_awoocool:1499967511062384664>"
+  },
+  "lp_blobaww": {
+    "id": "1499972205470158918",
+    "name": "lp_blobaww",
+    "format": "<:lp_blobaww:1499972205470158918>"
+  },
+  "lp_blobhappy": {
+    "id": "1499972210100535327",
+    "name": "lp_blobhappy",
+    "format": "<:lp_blobhappy:1499972210100535327>"
+  },
+  "lp_blobpeek": {
+    "id": "1499972212923437136",
+    "name": "lp_blobpeek",
+    "format": "<:lp_blobpeek:1499972212923437136>"
+  },
+  "lp_blobsalute": {
+    "id": "1499972218787074068",
+    "name": "lp_blobsalute",
+    "format": "<:lp_blobsalute:1499972218787074068>"
+  },
+  "lp_blobscream": {
+    "id": "1499972221563699231",
+    "name": "lp_blobscream",
+    "format": "<:lp_blobscream:1499972221563699231>"
+  },
+  "lp_pepegood": {
+    "id": "1499972230250102904",
+    "name": "lp_pepegood",
+    "format": "<:lp_pepegood:1499972230250102904>"
+  },
+  "lp_pepebad": {
+    "id": "1499972233190441010",
+    "name": "lp_pepebad",
+    "format": "<:lp_pepebad:1499972233190441010>"
+  },
+  "lp_pepegun": {
+    "id": "1499972238500171906",
+    "name": "lp_pepegun",
+    "format": "<:lp_pepegun:1499972238500171906>"
+  },
+  "lp_nekolove": {
+    "id": "1499972250378571846",
+    "name": "lp_nekolove",
+    "format": "<:lp_nekolove:1499972250378571846>"
+  },
+  "lp_pogchamp": {
+    "id": "1499972258964312114",
+    "name": "lp_pogchamp",
+    "format": "<:lp_pogchamp:1499972258964312114>"
+  },
+  "lp_monkas": {
+    "id": "1499972261585879160",
+    "name": "lp_monkas",
+    "format": "<:lp_monkas:1499972261585879160>"
+  },
+  "lp_ez": {
+    "id": "1499972268401627226",
+    "name": "lp_ez",
+    "format": "<:lp_ez:1499972268401627226>"
+  },
+  "lp_confetti": {
+    "id": "1499972280015392840",
+    "name": "lp_confetti",
+    "format": "<:lp_confetti:1499972280015392840>"
+  },
+  "lp_doge": {
+    "id": "1499972296193085603",
+    "name": "lp_doge",
+    "format": "<:lp_doge:1499972296193085603>"
+  },
+  "lp_yes": {
+    "id": "1499972308033605632",
+    "name": "lp_yes",
+    "format": "<:lp_yes:1499972308033605632>"
+  },
+  "lp_no": {
+    "id": "1499972311141585028",
+    "name": "lp_no",
+    "format": "<:lp_no:1499972311141585028>"
+  },
+  "lp_trollface": {
+    "id": "1499972317483372705",
+    "name": "lp_trollface",
+    "format": "<:lp_trollface:1499972317483372705>"
+  },
+  "lp_woke": {
+    "id": "1499972325028925562",
+    "name": "lp_woke",
+    "format": "<:lp_woke:1499972325028925562>"
+  },
+  "lp_roblox": {
+    "id": "1499972330108223598",
+    "name": "lp_roblox",
+    "format": "<:lp_roblox:1499972330108223598>"
+  },
+  "lp_fortnite": {
+    "id": "1499972333342032046",
+    "name": "lp_fortnite",
+    "format": "<:lp_fortnite:1499972333342032046>"
+  },
+  "lp_loading": {
+    "id": "1499972336089170141",
+    "name": "lp_loading",
+    "format": "<:lp_loading:1499972336089170141>"
+  },
+  "lp_online2": {
+    "id": "1499972349133459548",
+    "name": "lp_online2",
+    "format": "<:lp_online2:1499972349133459548>"
+  },
+  "lp_offline2": {
+    "id": "1499972353587806298",
+    "name": "lp_offline2",
+    "format": "<:lp_offline2:1499972353587806298>"
+  }
+}

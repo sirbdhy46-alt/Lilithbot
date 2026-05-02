@@ -2,7 +2,7 @@
 
 ## Overview
 
-pnpm workspace monorepo using TypeScript. Each package manages its own dependencies.
+pnpm workspace monorepo. Contains a Discord bot (Lilith Protector) and a shared API server.
 
 ## Stack
 
@@ -15,6 +15,28 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 - **Validation**: Zod (`zod/v4`), `drizzle-zod`
 - **API codegen**: Orval (from OpenAPI spec)
 - **Build**: esbuild (CJS bundle)
+
+## Discord Bot — Lilith Protector
+
+Location: `artifacts/discord-bot/`
+
+A premium Discord bot with moderation, fun, utility, and protection features.
+
+### Key commands added:
+- `/addemojis pack [blob|hype|cats|pepe]` — Install 50 emojis from a pack in one go
+- `/addemojis steal [message_id]` — Clone all custom emojis from a message
+- `/addemojis list` — View available packs and free emoji slots
+- `/goodbye channel` — Set a dedicated goodbye channel
+- Leave messages auto-delete after **23 seconds**
+
+### Railway Deployment:
+See `artifacts/discord-bot/DEPLOY_RAILWAY.md` for step-by-step Railway deploy instructions.
+
+Required env vars: `DISCORD_TOKEN`, `DISCORD_CLIENT_ID`
+
+### Bot Key Commands:
+- `node src/index.js` — Start the bot
+- `node src/deploy-commands.js` — Register slash commands with Discord
 
 ## Key Commands
 
