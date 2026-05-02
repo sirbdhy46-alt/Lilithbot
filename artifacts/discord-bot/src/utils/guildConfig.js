@@ -301,6 +301,60 @@ export function updateVanityUses(guildId, uses) {
   }
 }
 
+// ─── Emergency Lockdown ───────────────────────────────────────
+export function getEmergency(guildId) {
+  const { guild } = getGuild(guildId);
+  return guild.emergency ?? { locked: false, lockedAt: null, lockedBy: null, logChannelId: null };
+}
+
+export function setEmergency(guildId, config) {
+  const { data, guild } = getGuild(guildId);
+  guild.emergency = { ...getEmergency(guildId), ...config };
+  data[guildId] = guild;
+  save(data);
+}
+
+// ─── Antibetray ───────────────────────────────────────────────
+export function getAntibetray(guildId) {
+  const { guild } = getGuild(guildId);
+  return guild.antibetray ?? {
+    enabled: false,
+    whitelist: [],
+    punishment: 'ban',
+    banThreshold: 3,
+    channelDeleteThreshold: 2,
+    roleDeleteThreshold: 2,
+    webhookCreateThreshold: 3,
+    windowMs: 10000,
+    logChannelId: null,
+  };
+}
+
+export function setAntibetray(guildId, config) {
+  const { data, guild } = getGuild(guildId);
+  guild.antibetray = { ...getAntibetray(guildId), ...config };
+  data[guildId] = guild;
+  save(data);
+}
+
+export function addAntibetrayWhitelist(guildId, userId) {
+  const { data, guild } = getGuild(guildId);
+  const ab = getAntibetray(guildId);
+  if (!ab.whitelist.includes(userId)) ab.whitelist.push(userId);
+  guild.antibetray = ab;
+  data[guildId] = guild;
+  save(data);
+}
+
+export function removeAntibetrayWhitelist(guildId, userId) {
+  const { data, guild } = getGuild(guildId);
+  const ab = getAntibetray(guildId);
+  ab.whitelist = ab.whitelist.filter(id => id !== userId);
+  guild.antibetray = ab;
+  data[guildId] = guild;
+  save(data);
+}
+
 // ─── Full config dump ─────────────────────────────────────────
 export function getFullConfig(guildId) {
   const { guild } = getGuild(guildId);
