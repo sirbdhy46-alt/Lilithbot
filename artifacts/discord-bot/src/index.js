@@ -1,3 +1,9 @@
+const http = require('http');
+
+http.createServer((req, res) => {
+  res.writeHead(200);
+  res.end('Bot is alive!');
+}).listen(process.env.PORT || 3000);
 import 'dotenv/config';
 import { Client, GatewayIntentBits, Collection, Partials } from 'discord.js';
 import { readdirSync } from 'fs';
